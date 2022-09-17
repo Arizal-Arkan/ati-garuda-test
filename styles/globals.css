@@ -2,6 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
+  background-color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
@@ -15,12 +16,64 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+.button-dash {
+    cursor: pointer;
+    margin-top: 25px;
+    width: 100%;
+	color: #009EDB !important;
+	border: 2.22px dashed #009EDB !important;
+  	padding: 10px 44px !important;
+    background-color: #fff;
+}
+
+.button-main {
+    cursor: pointer;
+    margin-top: 25px;
+    border-radius: 8px;
+    width: 40%;
+	color: #fff !important;
+	border: none;
+  	padding: 10px 44px !important;
+    background-color: #16558B;
+}
+
+.footer {
+    margin-top: 25px;
+    width: 100%;
+    background-color: #0F5088;
+    padding: 10px;
+    justify-content: space-between;
+    display: flex;
+    padding-left: 60px;
+    padding-right: 60px;
+    color: #fff;
+}
+
+.footer > div {
+    display: flex;
+}
+
+@media screen and (max-width: 760px) {
+    .button-main {
+        width: 100%;
+    }
+    .garuda {
+        width: 120px;
+    }
+    .footer{
+        padding: 10px;
+    }
+    .footer > p {
+        font-size: 11px;
+    } 
+    .footer > div > p {
+        font-size: 11px;
+        margin: 10px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .garuda {
+        width: 90px;
+    }
 }
