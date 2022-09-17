@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Container, Grid } from "@mui/material";
 import Footer from "../components/Footer";
 
@@ -11,6 +10,10 @@ import SidePrice from '../components/sideDetailPrice'
 export default function Home() {
   return (
     <>
+     <Head>
+        <title>Garuda Indonesia</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <Container sx={{ marginTop: "25px" }}>
         <PaymentProcess />
         <Grid container spacing={2} marginTop={2}>
