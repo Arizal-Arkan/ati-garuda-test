@@ -19,25 +19,53 @@ import Tab from "@mui/material/Tab";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const listPayment = [
   "Credit / Debit Card",
-  "LinkAja",
   "KlikBCA",
   "e-Pay BRI",
   "Climb Clicks",
   "GoPay",
+  "OVO",
   "ATM",
-  "BNI Mobile",
-  "ShoppePay",
+  "ShopeePay",
+  "Akulaku",
+  "Indodana",
+  "Kredivo",
   "Bank Transfer",
-  "Alfamart",
-  "Indomart",
+  "Convenient Store",
+  "BRI Ceria",
+];
+
+const listPaymentDesktop = [
+  {
+    type: "Credit Card",
+    data: ["Credit / Debit Card"],
+  },
+  {
+    type: "Internet Banking",
+    data: ["KlikBCA", "e-Pay BRI", "Climb Clicks"],
+  },
+  {
+    type: "E-Wallet",
+    data: ["GoPay", "OVO", "LinkAja", "ShopeePay"],
+  },
+  {
+    type: "Bank Manual",
+    data: ["Bank Transfer", "ATM"],
+  },
+  {
+    type: "Paylater",
+    data: ["Akulaku", "Indodana", "Kredivo", "BRI Ceria"],
+  },
+  {
+    type: "Convenient Store",
+    data: ["Indomart", "Alfamart"],
+  },
 ];
 
 const schema = yup.object().shape({
-  number: yup.string().min(16).required(),
   month: yup.string().required(),
   year: yup.string().required(),
   ccv: yup.string().min(3).max(3).required(),
@@ -47,10 +75,10 @@ const schema = yup.object().shape({
 export default function BoxPayment() {
   const [age, setAge] = React.useState("");
   const [value, setValue] = React.useState(0);
+  const [cardNumber, setCardNumber] = React.useState("");
+
   const {
-    register,
     handleSubmit,
-    watch,
     control,
     formState: { errors },
   } = useForm({
@@ -59,11 +87,7 @@ export default function BoxPayment() {
 
   const onSubmit = (data) => {
     console.log(data);
-    Swal.fire(
-      'Payment Success',
-      'Thank you for puchasing',
-      'success'
-    )
+    Swal.fire("Payment Success", "Thank you for puchasing", "success");
   };
 
   const handleChange = (event) => {
@@ -72,6 +96,19 @@ export default function BoxPayment() {
 
   const handleChangeTab = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const onChangeCardNumber = (e) => {
+    setCardNumber(e.target.value);
+    if (e.target.length !== 0) {
+      const ccNumber = e.target.value.split(" ").join("");
+
+      const sparateNumber = ccNumber.match(/.{1,4}/g);
+
+      const newCc = sparateNumber?.join(" ");
+
+      setCardNumber(newCc);
+    }
   };
 
   return (
@@ -93,18 +130,32 @@ export default function BoxPayment() {
           width="30%"
           sx={{ display: { xs: "none", sm: "none", md: "block" } }}
         >
-          {listPayment.map((val, i) => {
+          {listPaymentDesktop.map((val, i) => {
             return (
               <Typography
+                variant="h6"
                 key={i}
-                mb={3}
+                mb={2}
                 ml={2}
                 fontWeight="600"
-                color={i !== 0 ? "#16558B" : "#009EDB"}
-                sx={{ cursor: "pointer" }}
+                color="rgba(49,53,59,.96)"
+                sx={{ fontSize: "15px" }}
               >
-                {val}
-                {/* <hr color='#009EDB' style={i !== 0 ? {display: 'block'} : {display: 'none'}} /> */}
+                {val.type}
+                {val.data.map((valX) => {
+                  return(
+                    <Typography
+                    key={i}
+                    mb={1}
+                    ml={0.5}
+                    fontWeight="500"
+                    color={i !== 0 ? "#16558B" : "#009EDB"}
+                    sx={{ cursor: "pointer" }}
+                  >
+                    {valX}
+                  </Typography>
+                  )
+                })}
               </Typography>
             );
           })}
@@ -153,24 +204,20 @@ export default function BoxPayment() {
               },
             }}
           >
-            <Controller
-              name="number"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  id="outlined-error"
-                  error={!!errors.number}
-                  helperText={errors.number ? errors.number?.message : ""}
-                  label="Card Number *"
-                  sx={{
-                    width: { xs: "100%", sm: "100%", md: "50%" },
-                    marginRight: { xs: "0", sm: "0", md: "40px" },
-                    marginTop: { xs: "20px", sm: "20px", md: "0" },
-                  }}
-                />
-              )}
+            <TextField
+              id="cnumber"
+              value={cardNumber}
+              required
+              inputProps={{ maxLength: 19 }}
+              onChange={onChangeCardNumber}
+              error={!!errors.number}
+              helperText={errors.number ? errors.number?.message : ""}
+              label="Card Number"
+              sx={{
+                width: { xs: "100%", sm: "100%", md: "50%" },
+                marginRight: { xs: "0", sm: "0", md: "40px" },
+                marginTop: { xs: "20px", sm: "20px", md: "0" },
+              }}
             />
             <Image src={Card} alt="card" />
           </Box>
@@ -191,6 +238,7 @@ export default function BoxPayment() {
                     {...field}
                     id="outlined-error"
                     error={!!errors.month}
+                    inputProps={{ maxLength: 2 }}
                     helperText={errors.month ? errors.month?.message : ""}
                     label="Month Expiration *"
                     sx={{ width: "100%", marginRight: "40px" }}
@@ -207,6 +255,7 @@ export default function BoxPayment() {
                     id="outlined-error"
                     error={!!errors.year}
                     helperText={errors.year ? errors.year?.message : ""}
+                    inputProps={{ maxLength: 2 }}
                     label="Year Expiration *"
                     sx={{ width: "100%", marginRight: "40px" }}
                   />
@@ -221,6 +270,7 @@ export default function BoxPayment() {
                     {...field}
                     type="password"
                     id="outlined-error"
+                    inputProps={{ maxLength: 3 }}
                     error={!!errors.ccv}
                     helperText={errors.ccv ? errors.ccv?.message : ""}
                     label="CCV *"
